@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TikTok-koppeling</title>
+<style>
+  :root { --bg:#05070d; --fg:#e8eefc; --muted:#a3adc6; --accent:#3d7bff; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family:system-ui,sans-serif; padding:16px; }
+  main { max-width:640px; margin:64px auto; text-align:center; }
+  code { display:block; word-break:break-all; background:#0e1424; border:1px solid #1e2a48; padding:16px; border-radius:8px; margin:16px 0; font-size:14px; }
+  button { background:var(--accent); color:#fff; border:0; padding:10px 20px; border-radius:6px; font-size:15px; cursor:pointer; }
+  p { color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">TikTok-koppeling</h1>
+  <p id="msg">Bezig…</p>
+  <code id="code" hidden></code>
+  <button id="copy" hidden>Kopieer code</button>
+</main>
+<script>
+  // Toont de eenmalige autorisatiecode lokaal in de browser.
+  // Er wordt niets opgeslagen of verstuurd.
+  const q = new URLSearchParams(location.search);
+  const code = q.get('code'), err = q.get('error');
+  const msg = document.getElementById('msg'), box = document.getElementById('code'), btn = document.getElementById('copy');
+  if (code) {
+    msg.textContent = 'Gelukt. Kopieer deze code en plak ze in het script in uw terminal. De code is enkele minuten geldig.';
+    box.textContent = code; box.hidden = false; btn.hidden = false;
+    btn.onclick = () => navigator.clipboard.writeText(code).then(() => btn.textContent = 'Gekopieerd');
+  } else if (err) {
+    msg.textContent = 'TikTok gaf een fout: ' + err + (q.get('error_description') ? ' (' + q.get('error_description') + ')' : '');
+  } else {
+    msg.textContent = 'Deze pagina ontvangt de code na het inloggen via TikTok.';
+  }
+</script>
+</body>
+</html>
